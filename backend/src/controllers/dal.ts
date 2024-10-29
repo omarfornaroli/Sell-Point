@@ -1,46 +1,43 @@
-import { Model, Models } from 'mongoose';
-import { DAL, DALModelKeys } from '../models/models';
-import { Request, Response } from 'express';
+import mongoose, { Model, Models } from 'mongoose';
+import { DAL, DALModelKeys } from '../contracts/models';
+import { Ent, InstanceSchemaType } from '../../../shared/contracts/ent-contracts';
+import { SchemaHelper } from '../../../shared/helpers/schema-helper';
 
 export class DALController {
-    static insert(req: Request, res: Response) {
-        if (!req.params?.schema) return;
-        const model = DAL[`${req.params.schema}Model` as DALModelKeys] as Model<any>;
-        model.create(req.body).then(() => res.send({ result: 'ok' }))
-            .catch((err: any) => res.send(err));
+    static async insert<T extends Ent>(schemaId: InstanceSchemaType, ent: T) {
+        const model = DALController.getModel(schemaId);
+        return (await model.create(ent)) as T;
     };
 
-    static getMany(req: Request, res: Response) {
-        if (!req.params?.schema) return;
-        const model = DAL[`${req.params.schema}Model` as DALModelKeys] as Model<any>;
+    static async getMany<T extends Ent>(schemaId: InstanceSchemaType, filter?: mongoose.FilterQuery<T>) {
+        if (!schemaId) throw new Error('model is required');
+        const model = DALController.getModel(schemaId);
         const paths = Object.keys(model.schema.paths);
-        model.find({ enterprise: (req as any).user.enterprise })
-            .populate(paths)
-            .then((result: any) => res.send(result))
-            .catch((err: any) => res.send(err));
+        return (await model.find(filter ?? {}).populate(paths ?? [])) as T[]
     };
 
-    static getOne(req: Request, res: Response) {
-        if (!req.params?.schema) return;
-        const model = DAL[`${req.params.schema}Model` as DALModelKeys] as Model<any>
-        model.findById(req.params.id)
-            .then((result: any) => res.json(result))
-            .catch((err: any) => res.send(err));
+    static async getById<T extends Ent>(schemaId: InstanceSchemaType, _id: string) {
+        if (!_id) throw new Error('id is required');
+        const model = DALController.getModel(schemaId);
+        return (await model.findById(_id)) as T
     };
 
-    static updateOne(req: Request, res: Response) {
-        if (!req.params?.schema) return;
-        const model = DAL[`${req.params.schema}Model` as DALModelKeys] as Model<any>
-        model.updateOne({ _id: req.params.id }, { $set: req.body })
-            .then(result => res.send({ result: 'ok' }))
-            .catch(err => res.send(err));
+    static async update<T extends Ent>(ent: T) {
+        if (!ent._id) throw new Error('id is required');
+        const model = DALController.getModel(ent._schema);
+        await model.updateOne({ _id: ent._id }, { $set: ent });
+        return ent;
     };
 
-    static delete(req: Request, res: Response) {
-        if (!req.params?.schema) return;
-        const model = DAL[`${req.params.schema}Model` as DALModelKeys] as Model<any>
-        model.deleteOne({ _id: req.params.id })
-            .then((result: any) => res.send({ result: 'ok' }))
-            .catch((err: any) => res.send(err));
+    static async deleteById(schemaId: InstanceSchemaType, _id: string) {
+        if (!_id) throw new Error('id is required');
+        const model = DALController.getModel(schemaId);
+        await model.deleteOne({ _id })
     };
+
+    private static getModel(schemaId: InstanceSchemaType) {
+        const schemaAlias = SchemaHelper.getSchemaAlias_FromId(schemaId);
+        const model = DAL[`${schemaAlias}Model` as DALModelKeys] as Model<any>;
+        return model;
+    }
 }

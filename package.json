@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "start-frontend": "cd frontend && npm run start",
+    "start-backend": "cd backend && npm run dev"
+  },
+  "dependencies": {
+    "@types/json-schema": "^7.0.15",
+    "i": "^0.3.7",
+    "json-schema": "^0.4.0",
+    "npm": "^10.9.0",
+    "uuid": "^11.0.1"
+  }
+}
