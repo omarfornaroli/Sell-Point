@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cors from 'cors';
@@ -7,18 +6,16 @@ import { IndexRouter } from './routes/index';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+import { BootHelper } from './boot';
 
 dotenv.config();
 
-const MONGODB_URL = process.env.MONGODB_URL
-const PORT = process.env.PORT
 const corsOptions = {
-    origin: 'http://localhost',
+    origin: 'http://localhost:4200',
     optionsSuccessStatus: 200
 };
 
 const app = express();
-
 app.use(compression());
 app.use(cors(corsOptions));
 app.use(function (req: any, res: { setHeader: (arg0: string, arg1: string) => void; }, next: () => void) {
@@ -29,7 +26,7 @@ app.use(function (req: any, res: { setHeader: (arg0: string, arg1: string) => vo
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(IndexRouter);
+app.use('/api', IndexRouter);
 
 let usersConmected = 0;
 
@@ -50,11 +47,6 @@ io.on('connection', (socket) => {
     });
 });
 
-mongoose.connect(MONGODB_URL as string).then((mongodb) => {
-    if (mongodb) console.log('MongoDB conectado');
-    server.listen(PORT, () => {
-        console.log(`Express puerto ${PORT}`);
-    });
-})
+BootHelper.init(server);
 
 export default app;

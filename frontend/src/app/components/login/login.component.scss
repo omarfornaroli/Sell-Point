@@ -1,0 +1,91 @@
+@font-face {
+    font-family: 'Hallo-Oyster-Personal';
+    src: url('/assets/font/hallo_oyster.otf') format("opentype");
+}
+
+.container {
+    background-image: url("/assets/img/engranajes.jpg");
+    background-size: 100% 120%;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 1fr 2rem;
+    align-content: center;
+    align-items: center;
+}
+
+.loginContainer {
+    width: 25rem;
+    height: fit-content;
+    background-color: black;
+    margin: auto;
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+
+    .footer {
+        display: flex;
+
+        button {
+            margin: auto;
+        }
+    }
+
+}
+
+.background {
+    background-size: cover;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.loginIcon {
+    display: flex;
+    margin: -20% auto 0px auto;
+    border-radius: 100%;
+    border: 5px solid white;
+    height: 100px;
+    width: 100px;
+    background-color: black;
+    color: white;
+}
+
+.loginIcon i {
+    margin: auto;
+    font-size: 30pt;
+    width: fit-content;
+    height: fit-content;
+}
+
+.loginTitle {
+    font-family: 'Hallo-Oyster-Personal';
+    text-align: center;
+    font-size: 40pt;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2rem;
+    color: rgb(177, 177, 177);
+    background-color: black;
+    font-size: 11pt;
+    text-align: center;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #292c30 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}

@@ -1,0 +1,17 @@
+:host {
+    display: grid;
+    width: 100%;
+    height: 100%;
+
+
+    nz-sider {
+        flex: none !important;
+        width: 30rem !important;
+        max-width: 100% !important;
+    }
+
+
+    nz-select {
+        width: 100%;
+    }
+}

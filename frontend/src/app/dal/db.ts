@@ -33,7 +33,7 @@ export const getDatabase = async (): Promise<MyDatabase> => {
         dbPromise = createRxDatabase<MyDatabaseCollections>({
             name: 'todoDatabase',
             storage: getRxStoragePouch('idb'),
-        }).then(async (db) => {
+        }).then(async (db: any) => {
             await db.addCollections({
                 todos: {
                     schema: {
