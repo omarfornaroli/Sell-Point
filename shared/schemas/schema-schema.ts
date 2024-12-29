@@ -1,14 +1,13 @@
-export const schemaJson = {
+import { SchemaConstants } from "../constants";
+import { EntSchema } from "../contracts";
+
+export const schemaJson: any = {
+    "_id": SchemaConstants.Schema,
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Schema",
     "type": "object",
     "properties": {
-        "type": {
-            "type": "string",
-            "enum": [
-                "object"
-            ]
-        },
+        "type": 'object',
         "properties": {
             "type": "object",
             "patternProperties": {
@@ -51,6 +50,9 @@ export const schemaJson = {
             },
             "uniqueItems": true
         }
+    },
+    "propertiesOptions": {
+        "schemaAlias": "schema"
     },
     "required": [
         "type",

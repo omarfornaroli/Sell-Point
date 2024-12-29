@@ -1,8 +1,9 @@
 import { Ent } from "./ent-contracts";
 
 export class UserEnt extends Ent {
-    name!: string;
+    firstName!: string;
+    lastName!: string;
+    documentId!: string;
     email!: string;
     password!: string;
-
 }

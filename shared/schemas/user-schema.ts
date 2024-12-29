@@ -1,4 +1,7 @@
+import { SchemaConstants } from "../constants";
+
 export const userJson = {
+    "_id": SchemaConstants.User,
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "User",
     "type": "object",
@@ -49,6 +52,9 @@ export const userJson = {
                 }
             }
         ],
+    },
+    "propertiesOptions": {
+        "schemaAlias": "user"
     },
     "required": [
         "username",

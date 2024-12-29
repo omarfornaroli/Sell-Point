@@ -11,12 +11,11 @@ import { BootHelper } from './boot';
 dotenv.config();
 
 const corsOptions = {
-    origin: 'http://localhost',
+    origin: 'http://localhost:4200',
     optionsSuccessStatus: 200
 };
 
 const app = express();
-
 app.use(compression());
 app.use(cors(corsOptions));
 app.use(function (req: any, res: { setHeader: (arg0: string, arg1: string) => void; }, next: () => void) {
@@ -27,7 +26,7 @@ app.use(function (req: any, res: { setHeader: (arg0: string, arg1: string) => vo
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(IndexRouter);
+app.use('/api', IndexRouter);
 
 let usersConmected = 0;
 

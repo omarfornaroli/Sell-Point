@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="background">
+        <div class="loginContainer">
+            <div class="loginIcon"><i class="fas fa-user"></i></div>
+            <h2 class="loginTitle">Ingresar</h2>
+
+            <nz-layout>
+                <nz-layout>
+                    <nz-content>
+                        <jsonforms [(data)]="data" [schema]="schema" [uischema]="uischema" [renderers]="renderers">
+                        </jsonforms>
+                    </nz-content>
+                </nz-layout>
+                <nz-footer>
+                    <div class="footer">
+                        <button nz-button nzType="primary" class="loginButton"
+                            (click)="onFormSubmit()">Ingresar</button>
+                    </div>
+                </nz-footer>
+            </nz-layout>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>
+            Sistema de Gestión - Diseño JFDigital - ©Copyright 2019 - Derechos de autor reservados
+        </span>
+    </div>
+</div>

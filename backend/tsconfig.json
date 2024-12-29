@@ -1,5 +1,12 @@
 {
   "extends": "../shared/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@shared/*": [
+        "../shared/*"
+      ]
+    }
+  },
   "include": [
     "../node_modules/**/*.ts",
     "../shared/**/*.ts",

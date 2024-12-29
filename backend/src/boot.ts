@@ -1,26 +1,25 @@
 import { Server, IncomingMessage, ServerResponse } from "http";
 import mongoose from "mongoose";
-import { DALController } from "./controllers/dal";
+import { DALController } from "./controllers/dal.controller";
 import { SchemaConstants, IdConstants } from "../../shared/constants";
-import { UserEnt } from "../../shared/contracts";
+import { EntSchema, UserEnt } from "../../shared/contracts";
 import { EntHelper } from "../../shared/helpers";
-
-
-
+import { schemas } from "../../shared/schemas";
+import { MongoClient } from "mongodb";
 
 export class BootHelper {
     static async init(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
         await BootHelper.connectDB(server);
-        await BootHelper.initDB();
+        BootHelper.initServer(server);
+
     }
 
     static async connectDB(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
-        mongoose.connect(process.env.MONGODB_URL as string).then((mongodb) => {
-            if (mongodb) {
-                console.log('MongoDB conectado');
-                BootHelper.initServer(server);
-            }
-        })
+        const client = new MongoClient(process.env.MONGODB_URL as string);
+        const connection = await client.connect();
+        DALController.dbInstance = connection.db('Cluster0');
+        console.log('MongoDB conectado');
+        await BootHelper.initDB();
     }
 
     static initServer(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
@@ -30,7 +29,24 @@ export class BootHelper {
     }
 
     static async initDB() {
+        await BootHelper.upsertSchemas();
         await BootHelper.createAdminUser();
+    }
+
+    static async upsertSchemas() {
+        try {
+            const schemas = await DALController.getMany(SchemaConstants.Schema);
+            if (schemas.length === 0) {
+                return BootHelper.initSchemas();
+            }
+        } catch (error) {
+            return BootHelper.initSchemas();
+        }
+    }
+
+    private static initSchemas() {
+        schemas.map(async (s) => await DALController.insert(SchemaConstants.Schema, EntHelper.createEnt<EntSchema>(SchemaConstants.Schema, s)));
+        console.log('Schemas upserted');
     }
 
     static async createAdminUser() {
@@ -46,6 +62,6 @@ export class BootHelper {
             email: 'admin@pistacho.com',
             password: 'af446ee9a14f194b95e8b014184c23ce',
         } as Partial<UserEnt>
-        DALController.insert(SchemaConstants.User, EntHelper.createEnt<UserEnt>(userEnt))
+        DALController.insert(SchemaConstants.User, EntHelper.createEnt<UserEnt>(SchemaConstants.User, userEnt))
     }
 }

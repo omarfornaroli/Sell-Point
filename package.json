@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "start-frontend": "cd frontend && npm run start",
-    "start-backend": "cd backend && npm run dev"
+    "start-ft": "cd frontend && npm run start",
+    "start-bk": "cd backend && npm run dev"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.15",

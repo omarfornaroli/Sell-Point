@@ -1,0 +1,34 @@
+<nz-layout>
+    <nz-header>
+        <nz-select [(ngModel)]="lucy" [nzShowSearch]="true" (ngModelChange)="onProductSelect($event)">
+            <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+            <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+            <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
+        </nz-select>
+    </nz-header>
+    <nz-layout>
+        <nz-content>
+            <nz-table #basicTable [nzData]="products">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Catidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (data of basicTable.data; track data) {
+                    <tr>
+                        <td>{{ data.name }}</td>
+                        <td>{{ data.quantity }}</td>
+                        <td>{{ data.price }}</td>
+                        <td>{{ data.total }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </nz-table></nz-content>
+        <nz-sider>right sidebar</nz-sider>
+    </nz-layout>
+    <nz-footer>TOTAL</nz-footer>
+</nz-layout>
