@@ -15,7 +15,7 @@ export class BootHelper {
     }
 
     static async connectDB(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
-        const client = new MongoClient(process.env.MONGODB_URL as string);
+        const client = new MongoClient(process.env.SP_MONGODB_URL as string);
         const connection = await client.connect();
         DALController.dbInstance = connection.db('Cluster0');
         console.log('MongoDB conectado');
@@ -23,8 +23,8 @@ export class BootHelper {
     }
 
     static initServer(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
-        server.listen(process.env.PORT, () => {
-            console.log(`Express puerto ${process.env.PORT}`);
+        server.listen(process.env.SP_PORT, () => {
+            console.log(`Express puerto ${process.env.SP_PORT}`);
         });
     }
 
