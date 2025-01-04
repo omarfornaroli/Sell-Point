@@ -6,7 +6,7 @@ import { DALController } from './controllers/dal.controller';
 import { SCHEMA_PREFIX } from '../../shared/constants';
 
 export let TOKEN = '';
-const JWTSecret = process.env.JWTSecret
+const JWTSecret = process.env.SP_JWTSecret
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction): Promise<void> {
     if (!req.headers.authorization) {
