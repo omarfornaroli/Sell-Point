@@ -1,9 +1,9 @@
-import { productSchema } from "./product-schema";
-import { schemaSchema } from "./schema-schema";
-import { userSchema } from "./user-schema";
+import { productSchemaData } from "./product-schema";
+import { schemaSchemaData } from "./schema-schema";
+import { userSchemaData } from "./user-schema";
 
-export const schemas = [
-    schemaSchema,
-    userSchema,
-    productSchema,
+export const schemasSP = [
+    schemaSchemaData,
+    userSchemaData,
+    productSchemaData
 ]

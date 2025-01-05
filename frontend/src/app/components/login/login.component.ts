@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../../services/auth.services';
 import { UserEnt } from '@shared/contracts/user-ent-contracts';
-import { loginJson } from '@shared/schemas/login-schema';
+import { loginSchemaData } from '@shared/schemas/login-schema';
 import { LoginEnt } from '@shared/contracts/login-ent-contracts';
 import CryptoJS from 'crypto-js';
 import { StringRendererTester, StringRendererComponent } from '../json-forms-custom-renders/ng-zorro/string-renderer.component';
@@ -35,7 +35,7 @@ export class LoginComponent {
   hide = true;
   userEnt!: UserEnt;
   data = { ...new LoginEnt };
-  schema: any = loginJson;
+  schema: any = loginSchemaData;
   uischema: any = {
     "type": "VerticalLayout",
     "elements": [

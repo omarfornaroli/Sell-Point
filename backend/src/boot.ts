@@ -1,11 +1,10 @@
 import { Server, IncomingMessage, ServerResponse } from "http";
-import mongoose from "mongoose";
 import { DALController } from "./controllers/dal.controller";
 import { SchemaConstants, IdConstants } from "../../shared/constants";
 import { EntSchema, UserEnt } from "../../shared/contracts";
 import { EntHelper } from "../../shared/helpers";
-import { schemas } from "../../shared/schemas";
 import { MongoClient } from "mongodb";
+import { schemasSP } from "../../shared/schemas";
 
 export class BootHelper {
     static async init(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
@@ -45,7 +44,7 @@ export class BootHelper {
     }
 
     private static initSchemas() {
-        schemas.map(async (s) => await DALController.insert(SchemaConstants.Schema, EntHelper.createEnt<EntSchema>(SchemaConstants.Schema, s)));
+        schemasSP.map(async (s) => await DALController.insert(SchemaConstants.Schema, EntHelper.createEnt<EntSchema>(SchemaConstants.Schema, s)));
         console.log('Schemas upserted');
     }
 

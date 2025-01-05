@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { SellPointComponent } from './components/sell/sell-point.component';
+import { SellPointComponent } from './components/sell-point/sell-point.component';
 import { AuthGuard } from './services/auth.services';
 
 export const routes: Routes = [

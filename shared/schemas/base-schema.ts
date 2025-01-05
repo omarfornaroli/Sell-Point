@@ -1,14 +1,14 @@
-import { schemaSchema } from "./schema-schema";
-import { userSchema } from "./user-schema";
+import { schemaSchemaData } from "./schema-schema";
+import { userSchemaData } from "./user-schema";
 
 export const baseSchemaJson = {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "schema": {
-      ...schemaSchema
+      ...schemaSchemaData
     },
     "user": {
-      ...userSchema
+      ...userSchemaData
     },
   }
 }

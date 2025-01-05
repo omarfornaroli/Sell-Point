@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../../services/auth.services';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,9 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { demoProducts } from './demoProducts';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
+import { DalService } from '../../dal/db.service';
+import { SchemaConstants } from '@shared/constants';
+import { SchemaHelper } from '@shared/helpers';
 @Component({
   selector: 'app-sell-point',
   standalone: true,
@@ -26,7 +29,7 @@ import { of } from 'rxjs';
   templateUrl: './sell-point.component.html',
   styleUrl: './sell-point.component.scss'
 })
-export class SellPointComponent {
+export class SellPointComponent implements AfterViewInit {
   sellpointForm!: FormGroup;
   returnUrl!: string;
   hide = true;
@@ -35,7 +38,7 @@ export class SellPointComponent {
   schema: any
   uischema: any
   lucy: any
-  products: Product[] = demoProducts;
+  products: Product[] = [];
   filteredProducts: Product[] = [];
   productsToSell: Product[] = [];
   selectedProduct: Product;
@@ -44,7 +47,16 @@ export class SellPointComponent {
     private fb: FormBuilder,
     private authService: AuthGuard,
     private router: Router,
+    private dalService: DalService
   ) {
+  }
+  ngAfterViewInit() {
+    this.loadProducts();
+  }
+
+  async loadProducts() {
+    const schemaAlias = SchemaHelper.getSchemaAlias_FromId(SchemaConstants.Product);
+    this.products = await this.dalService.findBySchema(schemaAlias) as Product[];
   }
 
   onProductSelect(_id: string) {

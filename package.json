@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@types/json-schema": "^7.0.15",
+    "global": "^4.4.0",
     "i": "^0.3.7",
     "json-schema": "^0.4.0",
     "npm": "^10.9.0",

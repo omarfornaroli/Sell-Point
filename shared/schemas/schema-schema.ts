@@ -1,7 +1,7 @@
 import { SchemaConstants } from "../constants";
 import { EntSchema } from "../contracts";
 
-export const schemaSchema: any = {
+export const schemaSchemaData: any = {
     "_id": SchemaConstants.Schema,
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Schema",
