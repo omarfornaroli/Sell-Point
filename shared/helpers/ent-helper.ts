@@ -1,9 +1,9 @@
 import { generateId } from "../constants";
-import { Ent, InstanceSchemaType } from "../contracts";
+import { _IdType, Ent } from "../contracts";
 
 
 export class EntHelper {
-    static createEnt<T extends Ent>(schema: InstanceSchemaType, ent: Partial<T>) {
+    static createEnt<T extends Ent>(schema: _IdType, ent: Partial<T>) {
         return {
             ...new Ent,
             ...ent,

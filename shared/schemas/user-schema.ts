@@ -1,6 +1,6 @@
 import { SchemaConstants } from "../constants";
 
-export const userJson = {
+export const userSchema = {
     "_id": SchemaConstants.User,
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "User",

@@ -1,17 +1,42 @@
 <nz-layout>
     <nz-header>
-        <nz-select [(ngModel)]="lucy" [nzShowSearch]="true" (ngModelChange)="onProductSelect($event)">
-            <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
-            <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
-            <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
+        <nz-select [(ngModel)]="selectedProduct" [nzShowSearch]="true" nzAllowClear
+            [nzCustomTemplate]="selectedTemplate" (ngModelChange)="onProductSelect($event)" nzServerSearch
+            (nzOnSearch)="onProductSearch($event)">
+            @for (p of filteredProducts; track p._id) {
+            <nz-option [nzValue]="p._id" nzCustomContent>
+                <ng-container *ngTemplateOutlet="productTemplate; context: { $implicit: p }"></ng-container>
+            </nz-option>
+            }
         </nz-select>
+        <ng-template #productTemplate let-p>
+            <div class="select-option">
+                <div>
+                    {{ p._label }}
+                </div>
+                <div>
+                    {{ p.measurementUnit }}
+                </div>
+                <div>
+                    ${{ p.price }}
+                </div>
+                <div>
+                    {{ p.proveedor }}
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #selectedTemplate let-selected>
+            <div *ngIf="getProduct$(selected.nzValue) |async as p">
+                <ng-container *ngTemplateOutlet="productTemplate; context: { $implicit: p }"></ng-container>
+            </div>
+        </ng-template>
     </nz-header>
     <nz-layout>
         <nz-content>
-            <nz-table #basicTable [nzData]="products">
+            <nz-table #basicTable [nzData]="productsToSell" [nzFrontPagination]="false">
                 <thead>
                     <tr>
-                        <th>Producto</th>
+                        <th nzWidth="65%">Producto</th>
                         <th>Catidad</th>
                         <th>Precio</th>
                         <th>Total</th>
@@ -20,10 +45,10 @@
                 <tbody>
                     @for (data of basicTable.data; track data) {
                     <tr>
-                        <td>{{ data.name }}</td>
+                        <td>{{ data._label }}</td>
                         <td>{{ data.quantity }}</td>
-                        <td>{{ data.price }}</td>
-                        <td>{{ data.total }}</td>
+                        <td>$ {{ data.price }}</td>
+                        <td>$ {{ getTotal(data.quantity, data.price) }}</td>
                     </tr>
                     }
                 </tbody>

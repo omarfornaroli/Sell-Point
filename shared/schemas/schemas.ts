@@ -1,7 +1,9 @@
-import { schemaJson } from "./schema-schema";
-import { userJson } from "./user-schema";
+import { productSchema } from "./product-schema";
+import { schemaSchema } from "./schema-schema";
+import { userSchema } from "./user-schema";
 
 export const schemas = [
-    schemaJson,
-    userJson
+    schemaSchema,
+    userSchema,
+    productSchema,
 ]

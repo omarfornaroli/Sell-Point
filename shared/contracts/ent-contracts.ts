@@ -1,11 +1,10 @@
 
 export type DateTimeStamp = string;
-type CompanyPrefixType = `urn:pistacho:`;
 
-export type _IdType = `${CompanyPrefixType}id:${string}`;
-export type InstanceSchemaType = `${CompanyPrefixType}schema:${string}`;
+export type _IdType = string;
 export class Ent {
     _id!: _IdType;
-    _schema!: InstanceSchemaType;
+    _label!: string;
+    _schema!: _IdType;
     _c: DateTimeStamp = new Date().toISOString();
 }

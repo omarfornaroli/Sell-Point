@@ -3,15 +3,19 @@ import { Router } from '@angular/router';
 import { AuthGuard } from '../../services/auth.services';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { UserEnt } from '@shared/contracts/user-ent-contracts';
+import { Product } from '@shared/contracts/product-contracts';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-
+import { demoProducts } from './demoProducts';
+import { CommonModule } from '@angular/common';
+import { of } from 'rxjs';
 @Component({
   selector: 'app-sell-point',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     FormsModule,
     NzSelectModule,
@@ -31,15 +35,11 @@ export class SellPointComponent {
   schema: any
   uischema: any
   lucy: any
-  products = [
-    {
-      key: '1',
-      name: 'John Brown',
-      quantity: 5,
-      price: 1342.23,
-      total: 8000
-    }
-  ];
+  products: Product[] = demoProducts;
+  filteredProducts: Product[] = [];
+  productsToSell: Product[] = [];
+  selectedProduct: Product;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthGuard,
@@ -47,7 +47,20 @@ export class SellPointComponent {
   ) {
   }
 
-  onProductSelect(product: any) {
-    this.products.push(product)
+  onProductSelect(_id: string) {
+    setTimeout(() => this.selectedProduct = null, 0);
+    const existingProductToSell = this.productsToSell.find(p => p._id === _id)
+    if (existingProductToSell) {
+      existingProductToSell.quantity++;
+      return;
+    }
+    this.productsToSell = [...this.productsToSell, { ...this.getProduct(_id), quantity: 1 }];
+  }
+
+  getProduct$(_id: string) { return of(this.getProduct(_id)) }
+  getProduct(_id: string) { return this.products.find(p => p._id === _id) }
+  getTotal(quantity: number, price: number) { return (quantity ?? 1) * price }
+  onProductSearch(search: string) {
+    this.filteredProducts = this.products.filter(p => p._label.toLowerCase().includes(search.toLowerCase()));
   }
 }

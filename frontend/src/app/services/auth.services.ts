@@ -52,7 +52,7 @@ export class AuthGuard implements CanActivate {
         }
     }
 
-    getToken(): string | undefined {
+    getToken(): string {
         let token = localStorage.getItem('token')
         if (token && token.length > 10) {
             return token
