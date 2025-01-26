@@ -14,7 +14,11 @@ export class SecurityController {
         try {
             const decodedPassword = CryptoJS.AES.decrypt(req.body?.password, 'secret key 123').toString(CryptoJS.enc.Utf8);
             const dbPrePassword = decodedPassword + ' - ' + req.body.email + ' - ' + decodedPassword;
+
             const user = await DALController.get(`${SchemaConstants.User}`, { email: req.body.email }) as UserEnt;
+            console.log(user)
+            console.log(decodedPassword)
+            console.log(md5(dbPrePassword), user.password)
 
             if (user && user.password === md5(dbPrePassword)) {
                 const token = SecurityController.createToken(user, req.body.sessionTime);

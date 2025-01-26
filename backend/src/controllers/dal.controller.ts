@@ -33,6 +33,11 @@ export class DALController {
         return (await model.findOne(params)) as unknown as T
     };
 
+    static async getAllEnts<T extends Ent>(): Promise<T[]> {
+        const collections = await DALController.dbInstance.collections();
+        return (await Promise.all(collections.map(async collection => (await collection.find().toArray()) as unknown as T[]))).flat();
+    };
+
     static async update<T extends Ent>(schemaId: string, ent: T): Promise<T> {
         if (!ent._id) throw new Error('id is required');
         const model = await DALController.getModel(schemaId);

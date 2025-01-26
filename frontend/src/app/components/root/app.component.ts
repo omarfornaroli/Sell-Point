@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SeedingService } from '../../services/seeding.service';
 import { DalService } from '../../dal/db.service';
+import { SocketService } from '../../services/socket.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -15,13 +16,23 @@ export class AppComponent {
   title = 'frontend';
   isFinishedInit: boolean;
 
-  constructor(private dalService: DalService, private seedingService: SeedingService) {
+  constructor(
+    private dalService: DalService,
+    private seedingService: SeedingService,
+    private socketService: SocketService
+  ) {
     this.init()
+  }
+
+  ngOnDestroy() {
+    this.socketService.disconnect();
   }
 
   async init() {
     await this.dalService.initDB();
-    await this.seedingService.seed();
+    this.socketService.listenDBChanges();
+    this.socketService.listenEnts();
+    this.seedingService.seed();
     this.isFinishedInit = true;
   }
 

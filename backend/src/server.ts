@@ -5,7 +5,6 @@ import cors from 'cors';
 import { IndexRouter } from './routes/index';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
 import { BootHelper } from './boot';
 
 dotenv.config();
@@ -28,25 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api', IndexRouter);
 
-let usersConmected = 0;
-
 const server = createServer(app);
-const io = new SocketIOServer(server, { cors: { origin: '*' } });
-io.on('connection', (socket) => {
-    usersConmected++;
-    console.log('A user connected amount:' + usersConmected);
-
-    socket.on('cmd', (msg) => {
-        console.log('Message: ' + msg);
-        // io.emit('chat message', "msg received");
-    });
-
-    socket.on('disconnect', () => {
-        usersConmected--;
-        console.log('User disconnected amount:' + usersConmected);
-    });
-});
-
 BootHelper.init(server);
 
 export default app;

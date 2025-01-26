@@ -3,22 +3,27 @@ import { DALController } from "./controllers/dal.controller";
 import { SchemaConstants, IdConstants } from "../../shared/constants";
 import { EntSchema, UserEnt } from "../../shared/contracts";
 import { EntHelper } from "../../shared/helpers";
-import { MongoClient } from "mongodb";
+import { ChangeStreamDocument, MongoClient } from "mongodb";
 import { schemasSP } from "../../shared/schemas";
+import { SocketController } from "./controllers/socket.controller";
 
 export class BootHelper {
     static async init(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
-        await BootHelper.connectDB(server);
+        await BootHelper.initDB();
         BootHelper.initServer(server);
-
+        BootHelper.initSocketIO(server);
+        BootHelper.listenDBChanges();
     }
 
-    static async connectDB(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
+    static initSocketIO(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
+        SocketController.init(server);
+    }
+
+    static async connectDB() {
         const client = new MongoClient(process.env.SP_MONGODB_URL as string);
         const connection = await client.connect();
         DALController.dbInstance = connection.db('Cluster0');
         console.log('MongoDB conectado');
-        await BootHelper.initDB();
     }
 
     static initServer(server: Server<typeof IncomingMessage, typeof ServerResponse>) {
@@ -28,6 +33,7 @@ export class BootHelper {
     }
 
     static async initDB() {
+        await BootHelper.connectDB();
         await BootHelper.upsertSchemas();
         await BootHelper.createAdminUser();
     }
@@ -58,9 +64,21 @@ export class BootHelper {
             _id: IdConstants.adminUser,
             _schema: SchemaConstants.User,
             name: 'Admin',
-            email: 'admin@pistacho.com',
-            password: 'af446ee9a14f194b95e8b014184c23ce',
+            email: 'admin@admin.com',
+            password: '30febb226794a2bd191cb961d3c8a355',
         } as Partial<UserEnt>
         DALController.insert(SchemaConstants.User, EntHelper.createEnt<UserEnt>(SchemaConstants.User, userEnt))
+    }
+
+    static listenDBChanges() {
+        try {
+            DALController.dbInstance.watch([], { fullDocument: 'updateLookup' }).on('change', async (change: ChangeStreamDocument<any> | any) => {
+                if (change.ns) {
+                    SocketController.socketServer.emit('db change', change);
+                }
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
 }

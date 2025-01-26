@@ -18,7 +18,7 @@
                     {{ p.measurementUnit }}
                 </div>
                 <div>
-                    ${{ p.price }}
+                    ${{ p.price | number:'1.2-2' }}
                 </div>
                 <div>
                     {{ p.proveedor }}
@@ -48,7 +48,7 @@
                         <td>{{ data._label }}</td>
                         <td>{{ data.quantity }}</td>
                         <td>$ {{ data.price }}</td>
-                        <td>$ {{ getTotal(data.quantity, data.price) }}</td>
+                        <td>$ {{ getTotal(data.quantity, data.price) | number:'1.2-2' }}</td>
                     </tr>
                     }
                 </tbody>
