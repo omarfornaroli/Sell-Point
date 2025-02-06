@@ -41,16 +41,23 @@ export class BootHelper {
     static async upsertSchemas() {
         try {
             const schemas = await DALController.getMany(SchemaConstants.Schema);
-            if (schemas.length === 0) {
-                return BootHelper.initSchemas();
+            if (schemasSP.length != schemas.length) {
+                return await BootHelper.initSchemas();
             }
         } catch (error) {
-            return BootHelper.initSchemas();
+            return await BootHelper.initSchemas();
         }
     }
 
-    private static initSchemas() {
-        schemasSP.map(async (s) => await DALController.insert(SchemaConstants.Schema, EntHelper.createEnt<EntSchema>(SchemaConstants.Schema, s)));
+    private static async initSchemas() {
+        await Promise.all(
+            schemasSP.map(async (s) => {
+                try {
+                    return await DALController.update(SchemaConstants.Schema, EntHelper.createEnt<EntSchema>(SchemaConstants.Schema, s), { upsert: true });
+                } catch (e) {
+                    console.error(e)
+                }
+            }))
         console.log('Schemas upserted');
     }
 

@@ -34,24 +34,24 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        JsonFormsModule,
-        ReactiveFormsModule,
-        NzInputModule,
-        NzCheckboxModule,
-        NzButtonModule,
-        NzFormModule
-    ],
-    declarations: [
-        StringRendererComponent,
-        BooleanControlRenderer
-    ],
-    exports: [
-        JsonFormsModule,
-        NzButtonModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [],
+  imports: [
+    CommonModule,
+    JsonFormsModule,
+    ReactiveFormsModule,
+    NzInputModule,
+    NzCheckboxModule,
+    NzButtonModule,
+    NzFormModule
+  ],
+  declarations: [
+    StringRendererComponent,
+    BooleanControlRenderer
+  ],
+  exports: [
+    JsonFormsModule,
+    NzButtonModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [],
 })
 export class ngZorroJsonFormsRenderersModule { }

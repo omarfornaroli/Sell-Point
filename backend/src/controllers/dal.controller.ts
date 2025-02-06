@@ -38,10 +38,10 @@ export class DALController {
         return (await Promise.all(collections.map(async collection => (await collection.find().toArray()) as unknown as T[]))).flat();
     };
 
-    static async update<T extends Ent>(schemaId: string, ent: T): Promise<T> {
+    static async update<T extends Ent>(schemaId: string, ent: T, opts?: { upsert: boolean }): Promise<T> {
         if (!ent._id) throw new Error('id is required');
         const model = await DALController.getModel(schemaId);
-        await model.updateOne({ _id: ent._id as any }, { $set: ent });
+        await model.updateOne({ _id: ent._id as any }, { $set: ent }, opts);
         return ent;
     };
 
@@ -56,7 +56,9 @@ export class DALController {
         if (schemaId !== SchemaConstants.Schema) {
             model = DALController.dbInstance.collection("schema")
             const schemaEnt = await model.findOne({ _id: schemaId as any }) as unknown as EntSchema
-            if (!schemaEnt) throw new Error('schema not found');
+            const msg = 'schema not found: ' + schemaId
+            console.log(msg)
+            if (!schemaEnt) throw new Error(msg);
             if (!schemaEnt.propertiesOptions?.schemaAlias) throw new Error('schemaAlias not found in schema id: ' + schemaId);
             model = DALController.dbInstance.collection(schemaEnt.propertiesOptions?.schemaAlias);
             return model;

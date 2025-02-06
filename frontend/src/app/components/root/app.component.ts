@@ -3,12 +3,18 @@ import { RouterOutlet } from '@angular/router';
 import { SeedingService } from '../../services/seeding.service';
 import { DalService } from '../../dal/db.service';
 import { SocketService } from '../../services/socket.service';
+import { CustomPopupComponent } from '../popup/popup.component';
+import { ViewComponent } from '../view/view.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    CustomPopupComponent,
+    ViewComponent
   ],
+  providers: [NzModalService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

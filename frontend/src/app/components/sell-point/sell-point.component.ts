@@ -8,12 +8,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { demoProducts } from './demoProducts';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { DalService } from '../../dal/db.service';
-import { SchemaConstants } from '@shared/constants';
+import { IdConstants, SchemaConstants } from '@shared/constants';
 import { SchemaHelper } from '@shared/helpers';
+import { PopupService } from '../../services/popup-service';
 @Component({
   selector: 'app-sell-point',
   standalone: true,
@@ -26,6 +26,7 @@ import { SchemaHelper } from '@shared/helpers';
     NzTableModule,
     NzLayoutModule
   ],
+  providers: [PopupService],
   templateUrl: './sell-point.component.html',
   styleUrl: './sell-point.component.scss'
 })
@@ -44,10 +45,8 @@ export class SellPointComponent implements AfterViewInit {
   selectedProduct: Product;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthGuard,
-    private router: Router,
-    private dalService: DalService
+    private dalService: DalService,
+    private popupService: PopupService
   ) {
   }
   ngAfterViewInit() {
@@ -60,13 +59,16 @@ export class SellPointComponent implements AfterViewInit {
   }
 
   onProductSelect(_id: string) {
-    setTimeout(() => this.selectedProduct = null, 0);
-    const existingProductToSell = this.productsToSell.find(p => p._id === _id)
-    if (existingProductToSell) {
-      existingProductToSell.quantity++;
-      return;
-    }
-    this.productsToSell = [...this.productsToSell, { ...this.getProduct(_id), quantity: 1 }];
+    // setTimeout(() => this.selectedProduct = null, 0);
+    // const existingProductToSell = this.productsToSell.find(p => p._id === _id)
+    // if (existingProductToSell) {
+    //   existingProductToSell.quantity++;
+    //   return;
+    // }
+    // this.productsToSell = [...this.productsToSell, { ...this.getProduct(_id), quantity: 1 }];
+
+    this.popupService.open({ schemaID: SchemaConstants.User, uiFormSchemaID: IdConstants.selectedProductSellSetup });
+
   }
 
   getProduct$(_id: string) { return of(this.getProduct(_id)) }

@@ -1,5 +1,4 @@
 import { SchemaConstants } from "../constants";
-import { EntSchema } from "../contracts";
 
 export const schemaSchemaData: any = {
     "_id": SchemaConstants.Schema,

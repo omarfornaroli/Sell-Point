@@ -1,0 +1,16 @@
+<div>
+  <nz-layout>
+    <nz-layout>
+      <nz-content>
+        @if(!!schema && !!uischema && !!renderers){
+        <jsonforms [(data)]="data" [schema]="schema" [uischema]="uischema" [renderers]="renderers">
+        </jsonforms>
+        }
+      </nz-content>
+    </nz-layout>
+    <nz-footer>
+      <div class="footer">
+      </div>
+    </nz-footer>
+  </nz-layout>
+</div>

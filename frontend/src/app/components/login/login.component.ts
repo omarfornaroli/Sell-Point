@@ -1,3 +1,4 @@
+import { RendererService } from './../json-forms-custom-renders/ng-zorro/renderers.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../../services/auth.services';
@@ -5,14 +6,7 @@ import { UserEnt } from '@shared/contracts/user-ent-contracts';
 import { loginSchemaData } from '@shared/schemas/login-schema';
 import { LoginEnt } from '@shared/contracts/login-ent-contracts';
 import CryptoJS from 'crypto-js';
-import { StringRendererTester, StringRendererComponent } from '../json-forms-custom-renders/ng-zorro/string-renderer.component';
 import { ngZorroJsonFormsRenderersModule } from '../json-forms-custom-renders/ng-zorro/renderers.module';
-
-import {
-  VerticalLayoutRenderer,
-  verticalLayoutTester,
-} from '@jsonforms/angular-material';
-import { BooleanControlRenderer, BooleanControlTester } from '../json-forms-custom-renders/ng-zorro/boolean-renderer.component';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 
 @Component({
@@ -26,12 +20,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  renderers = [
-    // { tester: integerRendererTester, renderer: IntegerRendererComponent },
-    { tester: StringRendererTester, renderer: StringRendererComponent },
-    { tester: BooleanControlTester, renderer: BooleanControlRenderer },
-    { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
-  ];
+  renderers;
   hide = true;
   userEnt!: UserEnt;
   data = { ...new LoginEnt };
@@ -66,7 +55,9 @@ export class LoginComponent {
   constructor(
     private authService: AuthGuard,
     private router: Router,
+    private rendererService: RendererService,
   ) {
+    this.renderers = this.rendererService.getRenderers()
   }
 
   onFormSubmit() {

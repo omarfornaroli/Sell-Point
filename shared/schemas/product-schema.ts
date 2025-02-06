@@ -4,6 +4,7 @@ export const productSchemaData = {
     "_id": SchemaConstants.Product,
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "_schema": "urn:pistacho:schema:schema",
     "properties": {
         "ProductGroup": {
             "type": "string"
